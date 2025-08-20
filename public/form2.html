@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استبيان العملاء - وكيل العروض الذكي</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .survey-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 900px;
+            overflow: hidden;
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .section-header {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-right: 4px solid #4f46e5;
+        }
+        .question-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .question-card:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+        }
+        .radio-option, .checkbox-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .radio-option:hover, .checkbox-option:hover {
+            background-color: #f8fafc;
+            transform: translateX(-3px);
+        }
+        .radio-option input:checked + label, .checkbox-option input:checked + label {
+            background-color: #4f46e5;
+            color: white;
+            transform: translateX(-3px);
+        }
+        .range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+            outline: none;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+        .range-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+        @media print {
+            body {
+                background: white !important;
+            }
+            .survey-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                max-width: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="survey-container">
+        <!-- Header -->
+        <div class="header-gradient text-white p-8 text-center">
+            <div class="mb-4">
+                <i class="fas fa-chart-line text-4xl mb-4"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">استبيان العملاء</h1>
+            <h2 class="text-xl font-semibold mb-4">وكيل العروض الذكي</h2>
+            <p class="text-lg opacity-90">نحن نقدر رأيك ونسعى لتحسين تجربتك معنا</p>
+        </div>
+
+        <form id="surveyForm" class="p-8 space-y-8">
+            <!-- Section 1: Basic Information and Shopping Habits -->
+            <div class="section">
+                <div class="section-header p-4 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-user-circle ml-3 text-indigo-600"></i>
+                        فقرة 1: المعلومات الأساسية والعادات الشرائية
+                    </h3>
+                </div>
+
+                <!-- Question 1 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">1</span>
+                        الفئة العمرية
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="age1" name="age" value="under18" class="ml-2">
+                            <label for="age1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أقل من 18</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="age2" name="age" value="18-25" class="ml-2">
+                            <label for="age2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">18–25</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="age3" name="age" value="26-35" class="ml-2">
+                            <label for="age3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">26–35</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="age4" name="age" value="36-45" class="ml-2">
+                            <label for="age4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">36–45</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="age5" name="age" value="over45" class="ml-2">
+                            <label for="age5" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أكثر من 45</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">2</span>
+                        كم مرة تقوم بالتسوق شهريًا؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="shopping1" name="shopping_frequency" value="daily" class="ml-2">
+                            <label for="shopping1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">بشكل يومي</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="shopping2" name="shopping_frequency" value="weekly" class="ml-2">
+                            <label for="shopping2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أسبوعي</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="shopping3" name="shopping_frequency" value="1-3times" class="ml-2">
+                            <label for="shopping3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">1–3 مرات في الشهر</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="shopping4" name="shopping_frequency" value="rarely" class="ml-2">
+                            <label for="shopping4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نادرًا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">3</span>
+                        هل تفضل التسوق عبر الإنترنت أم من خلال المتاجر الفعلية؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="pref1" name="shopping_preference" value="online" class="ml-2">
+                            <label for="pref1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عبر الإنترنت</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="pref2" name="shopping_preference" value="physical" class="ml-2">
+                            <label for="pref2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">من المتاجر</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="pref3" name="shopping_preference" value="both" class="ml-2">
+                            <label for="pref3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">كلاهما</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">4</span>
+                        كم مرة تبحث عن التخفيضات قبل اتخاذ قرار الشراء؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="search1" name="discount_search" value="always" class="ml-2">
+                            <label for="search1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">دائمًا</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="search2" name="discount_search" value="sometimes" class="ml-2">
+                            <label for="search2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أحيانًا</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="search3" name="discount_search" value="rarely" class="ml-2">
+                            <label for="search3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نادرًا</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="search4" name="discount_search" value="never" class="ml-2">
+                            <label for="search4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا أبحث أبدًا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">5</span>
+                        من أين تعرف عادةً عن التخفيضات؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="source1" name="discount_sources" value="whatsapp" class="ml-2">
+                            <label for="source1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">واتساب</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="source2" name="discount_sources" value="social" class="ml-2">
+                            <label for="source2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">انستجرام / فيسبوك</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="source3" name="discount_sources" value="direct" class="ml-2">
+                            <label for="source3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">زيارة المتجر مباشرة</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="source4" name="discount_sources" value="friends" class="ml-2">
+                            <label for="source4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">صديق أو معارف</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="source5" name="discount_sources" value="platforms" class="ml-2">
+                            <label for="source5" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">منصات خاصة بجمع العروض</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">6</span>
+                        ما أكثر ما يزعجك عند البحث عن تخفيض مناسب؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="annoy1" name="search_annoyances" value="ads" class="ml-2">
+                            <label for="annoy1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">كثرة الإعلانات</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="annoy2" name="search_annoyances" value="comparison" class="ml-2">
+                            <label for="annoy2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">صعوبة المقارنة</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="annoy3" name="search_annoyances" value="clarity" class="ml-2">
+                            <label for="annoy3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عدم وضوح التفاصيل</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="annoy4" name="search_annoyances" value="expired" class="ml-2">
+                            <label for="annoy4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عروض قديمة أو منتهية</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">7</span>
+                        هل سبق وغيّرت قرار الشراء بسبب عرض مفاجئ ظهر لك؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="change1" name="purchase_change" value="yes" class="ml-2">
+                            <label for="change1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نعم</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="change2" name="purchase_change" value="no" class="ml-2">
+                            <label for="change2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">8</span>
+                        ما نوع العرض الذي يجذبك أكثر؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="offer1" name="attractive_offers" value="percentage" class="ml-2">
+                            <label for="offer1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">خصم نسبة</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="offer2" name="attractive_offers" value="temporary" class="ml-2">
+                            <label for="offer2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عرض مؤقت</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="offer3" name="attractive_offers" value="gift" class="ml-2">
+                            <label for="offer3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">هدية مع الشراء</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="offer4" name="attractive_offers" value="shipping" class="ml-2">
+                            <label for="offer4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">شحن مجاني</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">9</span>
+                        هل تهتم بتاريخ صلاحية التخفيض قبل استخدامه؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="validity1" name="discount_validity" value="yes" class="ml-2">
+                            <label for="validity1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نعم</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="validity2" name="discount_validity" value="no" class="ml-2">
+                            <label for="validity2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">10</span>
+                        ما المدة الزمنية المثالية للعرض الجذاب بالنسبة لك؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="duration1" name="offer_duration" value="24hours" class="ml-2">
+                            <label for="duration1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">24 ساعة</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="duration2" name="offer_duration" value="2-3days" class="ml-2">
+                            <label for="duration2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">2–3 أيام</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="duration3" name="offer_duration" value="week" class="ml-2">
+                            <label for="duration3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أسبوع</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="duration4" name="offer_duration" value="more" class="ml-2">
+                            <label for="duration4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أكثر</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Customization and Discount Experience -->
+            <div class="section">
+                <div class="section-header p-4 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-cogs ml-3 text-indigo-600"></i>
+                        فقرة 2: التخصيص وتجربة التخفيضات
+                    </h3>
+                </div>
+
+                <!-- Question 11 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">11</span>
+                        هل ترغب في الحصول على تخفيضات مخصصة بناءً على ما تشتريه عادةً؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="custom1" name="customized_discounts" value="yes" class="ml-2">
+                            <label for="custom1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نعم</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="custom2" name="customized_discounts" value="no" class="ml-2">
+                            <label for="custom2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 12 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">12</span>
+                        إذا كانت التخفيضات مخصصة، ما نوع المعلومات التي تقبل مشاركتها لتحسينها؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="info1" name="shared_info" value="categories" class="ml-2">
+                            <label for="info1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">فئات المنتجات المفضلة</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="info2" name="shared_info" value="history" class="ml-2">
+                            <label for="info2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">تاريخ المشتريات</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="info3" name="shared_info" value="location" class="ml-2">
+                            <label for="info3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">الموقع الجغرافي</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="info4" name="shared_info" value="none" class="ml-2">
+                            <label for="info4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا أرغب بمشاركة أي معلومات</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 13 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">13</span>
+                        هل ترى أن التخصيص يجعل العرض أكثر جذبًا؟ (مقياس 1–5)
+                    </h4>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="customization_attractiveness" name="customization_attractiveness" min="1" max="5" value="3" class="range-slider flex-1">
+                        <span class="text-sm text-gray-600">5</span>
+                        <span id="customization_value" class="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Question 14 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">14</span>
+                        ما أكثر قناة تفضل تلقي التخفيضات من خلالها؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="channel1" name="preferred_channels" value="app" class="ml-2">
+                            <label for="channel1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">إشعار تطبيق</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="channel2" name="preferred_channels" value="whatsapp" class="ml-2">
+                            <label for="channel2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">رسالة على واتساب</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="channel3" name="preferred_channels" value="email" class="ml-2">
+                            <label for="channel3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">بريد إلكتروني</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="channel4" name="preferred_channels" value="social" class="ml-2">
+                            <label for="channel4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">منشور على وسائل التواصل</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 15 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">15</span>
+                        ما مدى قبولك لتلقي إشعار بالعرض خلال اليوم؟ (مقياس 1–5)
+                    </h4>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="notification_acceptance" name="notification_acceptance" min="1" max="5" value="3" class="range-slider flex-1">
+                        <span class="text-sm text-gray-600">5</span>
+                        <span id="notification_value" class="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Question 16 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">16</span>
+                        هل يزعجك أن تصلك عروض متكررة أو غير مناسبة لاهتماماتك؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="annoy_offers1" name="annoying_offers" value="yes" class="ml-2">
+                            <label for="annoy_offers1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نعم</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="annoy_offers2" name="annoying_offers" value="no" class="ml-2">
+                            <label for="annoy_offers2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 17 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">17</span>
+                        ما الذي يجعل العرض يبدو "موثوقًا" بالنسبة لك؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="trust1" name="trust_factors" value="store_name" class="ml-2">
+                            <label for="trust1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">اسم المتجر واضح</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="trust2" name="trust_factors" value="reviews" class="ml-2">
+                            <label for="trust2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">تقييمات المستخدمين</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="trust3" name="trust_factors" value="validity" class="ml-2">
+                            <label for="trust3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">وضوح تاريخ الصلاحية</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="trust4" name="trust_factors" value="return_policy" class="ml-2">
+                            <label for="trust4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">وجود سياسة استرجاع</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 18 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">18</span>
+                        ما مدى استعدادك لتبادل بعض المعلومات مقابل عروض أكثر ملاءمة لما تفضله؟ (مقياس 1–5)
+                    </h4>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="info_exchange" name="info_exchange" min="1" max="5" value="3" class="range-slider flex-1">
+                        <span class="text-sm text-gray-600">5</span>
+                        <span id="info_exchange_value" class="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Question 19 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">19</span>
+                        عندما ترى عرضًا بتخفيض كبير (أكثر من 70%)، ما أول رد فعل لديك؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="reaction1" name="big_discount_reaction" value="believe" class="ml-2">
+                            <label for="reaction1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أصدّق أنه عرض حقيقي</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reaction2" name="big_discount_reaction" value="doubt" class="ml-2">
+                            <label for="reaction2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أشك في مصداقيته</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reaction3" name="big_discount_reaction" value="verify" class="ml-2">
+                            <label for="reaction3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أحتاج للتحقق</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reaction4" name="big_discount_reaction" value="ignore" class="ml-2">
+                            <label for="reaction4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">أتجاهله</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 20 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">20</span>
+                        ما التجربة المثالية بالنسبة لك منذ اكتشاف العرض حتى إتمام الشراء؟
+                    </h4>
+                    <textarea name="ideal_experience" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none" placeholder="اكتب وصفًا مفصلًا للتجربة المثالية..."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 3: Challenges, Concerns, and Usage Desire -->
+            <div class="section">
+                <div class="section-header p-4 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-shield-alt ml-3 text-indigo-600"></i>
+                        فقرة 3: التحديات والمخاوف والرغبة في الاستخدام
+                    </h3>
+                </div>
+
+                <!-- Question 21 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">21</span>
+                        ما أكبر عقبة تمنعك من استخدام منصة للتخفيضات الذكية؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="obstacle1" name="platform_obstacles" value="notifications" class="ml-2">
+                            <label for="obstacle1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">كثرة الإشعارات</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="obstacle2" name="platform_obstacles" value="data_usage" class="ml-2">
+                            <label for="obstacle2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">الخوف من استخدام البيانات</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="obstacle3" name="platform_obstacles" value="trust" class="ml-2">
+                            <label for="obstacle3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عدم الثقة بالمصدر</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="obstacle4" name="platform_obstacles" value="no_need" class="ml-2">
+                            <label for="obstacle4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا أشعر بالحاجة</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 22 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">22</span>
+                        هل تفضل عروضًا متاحة للجميع أم عروضًا خاصة لمستخدمين محددين؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="offer_type1" name="offer_type_preference" value="public" class="ml-2">
+                            <label for="offer_type1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">متاحة للجميع</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="offer_type2" name="offer_type_preference" value="exclusive" class="ml-2">
+                            <label for="offer_type2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">خاصة بالمشتركين فقط</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="offer_type3" name="offer_type_preference" value="depends" class="ml-2">
+                            <label for="offer_type3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">يعتمد على نوع العرض</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 23 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">23</span>
+                        هل تعتقد أن العروض المخصصة قد تساعدك على اكتشاف متاجر جديدة؟ (مقياس 1–5)
+                    </h4>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="store_discovery" name="store_discovery" min="1" max="5" value="3" class="range-slider flex-1">
+                        <span class="text-sm text-gray-600">5</span>
+                        <span id="store_discovery_value" class="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Question 24 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">24</span>
+                        هل سبق أن واجهت عرضًا "وهميًا" أو غير حقيقي؟ إذا نعم، ماذا حدث؟
+                    </h4>
+                    <textarea name="fake_offer_experience" rows="3" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none" placeholder="اكتب تجربتك مع العروض الوهمية إن وجدت..."></textarea>
+                </div>
+
+                <!-- Question 25 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">25</span>
+                        ما هو أهم سبب يجعلك تستخدم منصة للعروض الذكية؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="reason1" name="main_usage_reason" value="save_money" class="ml-2">
+                            <label for="reason1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">توفير المال</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reason2" name="main_usage_reason" value="save_time" class="ml-2">
+                            <label for="reason2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">توفير الوقت</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reason3" name="main_usage_reason" value="better_comparison" class="ml-2">
+                            <label for="reason3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">مقارنة أفضل</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="reason4" name="main_usage_reason" value="enjoyable_experience" class="ml-2">
+                            <label for="reason4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">تجربة ممتعة</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 26 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">26</span>
+                        هل ترغب في تجربة منصة جديدة إذا كانت مجانية في البداية؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="radio-option">
+                            <input type="radio" id="try_platform1" name="try_free_platform" value="yes" class="ml-2">
+                            <label for="try_platform1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">نعم</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="try_platform2" name="try_free_platform" value="no" class="ml-2">
+                            <label for="try_platform2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">لا</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 27 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">27</span>
+                        إذا طلب منك تقييم تجربتك بعد استخدام المنصة لمدة شهر، ما أهم معيار ستعتمد عليه؟
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="criteria1" name="evaluation_criteria" value="offer_quality" class="ml-2">
+                            <label for="criteria1" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">جودة العروض</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="criteria2" name="evaluation_criteria" value="customization_level" class="ml-2">
+                            <label for="criteria2" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">مستوى التخصيص</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="criteria3" name="evaluation_criteria" value="ease_of_use" class="ml-2">
+                            <label for="criteria3" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">سهولة الاستخدام</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="criteria4" name="evaluation_criteria" value="store_count" class="ml-2">
+                            <label for="criteria4" class="p-3 rounded-lg border border-gray-200 block cursor-pointer">عدد المتاجر</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 28 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">28</span>
+                        ما مدى استعدادك للاستمرار باستخدام المنصة إذا كانت تُحدث العروض بشكل مستمر؟ (مقياس 1–5)
+                    </h4>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="platform_continuity" name="platform_continuity" min="1" max="5" value="3" class="range-slider flex-1">
+                        <span class="text-sm text-gray-600">5</span>
+                        <span id="platform_continuity_value" class="bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Question 29 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">29</span>
+                        ما أكثر ما يخيفك عند مشاركة بياناتك في مثل هذه المنصات؟
+                    </h4>
+                    <textarea name="data_sharing_fears" rows="3" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none" placeholder="اكتب مخاوفك بشأن مشاركة البيانات..."></textarea>
+                </div>
+
+                <!-- Question 30 -->
+                <div class="question-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-800">
+                        <span class="bg-indigo-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm ml-2">30</span>
+                        ما اقتراحك أو ملاحظتك لتحسين تجربة الحصول على التخفيضات باستخدام الحلول الذكية؟
+                    </h4>
+                    <textarea name="improvement_suggestions" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none" placeholder="اكتب اقتراحاتك وملاحظاتك لتحسين التجربة..."></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-12">
+                <button type="submit" class="submit-btn text-white px-12 py-4 rounded-full text-lg font-bold shadow-lg">
+                    <i class="fas fa-paper-plane ml-2"></i>
+                    إرسال الاستبيان
+                </button>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="bg-gray-100 p-6 text-center">
+            <p class="text-gray-600">شكرًا لك على وقتك ومشاركتك في هذا الاستبيان</p>
+            <p class="text-sm text-gray-500 mt-2">
+                <i class="fas fa-lock ml-1"></i>
+                جميع المعلومات محفوظة وآمنة
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Range slider value updates
+        const ranges = [
+            'customization_attractiveness',
+            'notification_acceptance', 
+            'info_exchange',
+            'store_discovery',
+            'platform_continuity'
+        ];
+
+        ranges.forEach(range => {
+            const slider = document.getElementById(range);
+            const valueDisplay = document.getElementById(range + '_value');
+            
+            if (slider && valueDisplay) {
+                slider.addEventListener('input', function() {
+                    valueDisplay.textContent = this.value;
+                });
+            }
+        });
+
+        // Form submission
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const responses = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (responses[key]) {
+                    if (Array.isArray(responses[key])) {
+                        responses[key].push(value);
+                    } else {
+                        responses[key] = [responses[key], value];
+                    }
+                } else {
+                    responses[key] = value;
+                }
+            }
+            
+            // Show success message
+            alert('تم إرسال الاستبيان بنجاح! شكرًا لك على مشاركتك.');
+            
+            // Log responses (in real implementation, send to server)
+            console.log('Survey Responses:', responses);
+        });
+
+        // Smooth scrolling for better user experience
+        document.querySelectorAll('.question-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+
+        // Auto-save functionality (optional)
+        function autoSave() {
+            const formData = new FormData(document.getElementById('surveyForm'));
+            const responses = {};
+            
+            for (let [key, value] of formData.entries()) {
+                responses[key] = value;
+            }
+            
+            localStorage.setItem('surveyData', JSON.stringify(responses));
+        }
+
+        // Load saved data on page load
+        window.addEventListener('load', function() {
+            const savedData = localStorage.getItem('surveyData');
+            if (savedData) {
+                const responses = JSON.parse(savedData);
+                
+                Object.keys(responses).forEach(key => {
+                    const element = document.querySelector(`[name="${key}"]`);
+                    if (element) {
+                        if (element.type === 'radio' || element.type === 'checkbox') {
+                            const specificElement = document.querySelector(`[name="${key}"][value="${responses[key]}"]`);
+                            if (specificElement) {
+                                specificElement.checked = true;
+                            }
+                        } else {
+                            element.value = responses[key];
+                        }
+                    }
+                });
+            }
+        });
+
+        // Auto-save every 30 seconds
+        setInterval(autoSave, 30000);
+    </script>
+</body>
+</html>
