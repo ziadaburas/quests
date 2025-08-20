@@ -1,0 +1,11 @@
+node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log
+
+# OS generated files
+Thumbs.db
+
+# Vercel
+.vercel
