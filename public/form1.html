@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استبيان أصحاب المتاجر – وكيل العروض الذكي</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-right: 4px solid #e5e7eb;
+        }
+        
+        .question-card:hover {
+            border-right-color: #667eea;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scale-option {
+            transition: all 0.2s ease;
+        }
+        
+        .scale-option:hover {
+            transform: scale(1.05);
+        }
+        
+        input[type="radio"]:checked + label,
+        input[type="checkbox"]:checked + label {
+            background-color: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media print {
+            body { print-color-adjust: exact; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="section-header text-white p-8 rounded-t-2xl mb-8">
+            <div class="text-center">
+                <i class="fas fa-store text-4xl mb-4"></i>
+                <h1 class="text-3xl font-bold mb-2">استبيان أصحاب المتاجر</h1>
+                <h2 class="text-xl font-semibold opacity-90">وكيل العروض الذكي</h2>
+                <p class="mt-4 text-lg opacity-80">
+                    نهدف من خلال هذا الاستبيان إلى فهم احتياجاتكم وتحدياتكم في إدارة العروض والتسويق
+                </p>
+            </div>
+        </div>
+
+        <form id="surveyForm" class="space-y-8">
+            <!-- القسم الأول: المعلومات الأساسية والممارسات الحالية -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-blue-600 text-white p-6">
+                    <h3 class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-info-circle ml-3"></i>
+                        القسم الأول: المعلومات الأساسية والممارسات الحالية
+                    </h3>
+                </div>
+                <div class="p-6 space-y-6">
+                    <!-- السؤال 1 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            1. اسم المتجر ونوع المنتجات أو الخدمات
+                        </label>
+                        <input type="text" name="store_name" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="مثال: متجر الأزياء العصرية - ملابس نسائية">
+                    </div>
+
+                    <!-- السؤال 2 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            2. حجم المتجر
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="store_size" value="small" class="ml-3">
+                                <span>متجر صغير</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="store_size" value="medium" class="ml-3">
+                                <span>متجر متوسط</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="store_size" value="chain" class="ml-3">
+                                <span>سلسلة متاجر</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 3 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            3. عدد العروض التي تقوم بنشرها في الشهر
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="offers_count" value="0" class="ml-3">
+                                <span>0</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="offers_count" value="1-3" class="ml-3">
+                                <span>1–3</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="offers_count" value="4-7" class="ml-3">
+                                <span>4–7</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="offers_count" value="more_than_7" class="ml-3">
+                                <span>أكثر من 7</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 4 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            4. ما القنوات التي تستخدمها حاليًا لنشر عروضك؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="store" class="ml-3">
+                                <span>المتجر نفسه</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="whatsapp" class="ml-3">
+                                <span>واتساب</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="social" class="ml-3">
+                                <span>فيسبوك / إنستجرام</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="local_groups" class="ml-3">
+                                <span>مجموعات محلية</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="website" class="ml-3">
+                                <span>موقع إلكتروني</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="channels" value="other" class="ml-3">
+                                <span>أخرى</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 5 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            5. ما نسبة العروض التي يتم تفعيلها فعليًا من العملاء؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="conversion_rate" value="0-10" class="ml-3">
+                                <span>0–10%</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="conversion_rate" value="10-30" class="ml-3">
+                                <span>10–30%</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="conversion_rate" value="30-50" class="ml-3">
+                                <span>30–50%</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="conversion_rate" value="more_than_50" class="ml-3">
+                                <span>أكثر من 50%</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 6 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            6. هل تعتمد على مواسم معينة لإطلاق التخفيضات، أم تنشرها طوال السنة؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="seasonal" value="seasonal_only" class="ml-3">
+                                <span>مواسم فقط</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="seasonal" value="year_round" class="ml-3">
+                                <span>طوال السنة</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 7 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            7. هل سبق أن استخدمت أداة أو منصة لإدارة العروض أو التسويق؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="used_tools" value="yes" class="ml-3">
+                                <span>نعم</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="used_tools" value="no" class="ml-3">
+                                <span>لا</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 8 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            8. إذا كانت الإجابة نعم، ما أكثر ما أعجبك بهذه الأدوات؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="liked_features" value="ease_of_use" class="ml-3">
+                                <span>سهولة الاستخدام</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="liked_features" value="reports" class="ml-3">
+                                <span>تقارير</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="liked_features" value="scheduling" class="ml-3">
+                                <span>إمكانية الجدولة</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="liked_features" value="nothing" class="ml-3">
+                                <span>لا شيء محدد</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 9 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            9. أكثر شيء يزعجك في إدارة العروض اليوم
+                        </label>
+                        <input type="text" name="biggest_annoyance" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="اكتب إجابتك هنا...">
+                    </div>
+
+                    <!-- السؤال 10 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            10. ما أكثر ما تتمنى تغييره في طريقة إدارة العروض الحالية؟
+                        </label>
+                        <textarea name="desired_changes" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="اكتب إجابتك التفصيلية هنا..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم الثاني: التخصيص وقياس الأداء -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-green-600 text-white p-6">
+                    <h3 class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-chart-line ml-3"></i>
+                        القسم الثاني: التخصيص وقياس الأداء
+                    </h3>
+                </div>
+                <div class="p-6 space-y-6">
+                    <!-- السؤال 1 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            1. ما مدى قدرة نظام موحّد يجمع العروض على زيادة مبيعاتك؟ (مقياس 1–5)
+                        </label>
+                        <div class="flex justify-center space-x-4">
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="unified_system_impact" value="1" class="mb-2">
+                                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">1</div>
+                                    <span class="text-sm mt-1">ضعيف جداً</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="unified_system_impact" value="2" class="mb-2">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">2</div>
+                                    <span class="text-sm mt-1">ضعيف</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="unified_system_impact" value="3" class="mb-2">
+                                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold">3</div>
+                                    <span class="text-sm mt-1">متوسط</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="unified_system_impact" value="4" class="mb-2">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">4</div>
+                                    <span class="text-sm mt-1">جيد</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="unified_system_impact" value="5" class="mb-2">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">5</div>
+                                    <span class="text-sm mt-1">ممتاز</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 2 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            2. ما نوع العروض الأكثر تأثيرًا على مبيعاتك؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="effective_offers" value="percentage_discount" class="ml-3">
+                                <span>خصم نسبة</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="effective_offers" value="buy_one_get_one" class="ml-3">
+                                <span>عرض 1+1</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="effective_offers" value="free_shipping" class="ml-3">
+                                <span>شحن مجاني</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="effective_offers" value="custom_coupons" class="ml-3">
+                                <span>كوبونات مخصصة</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="effective_offers" value="seasonal_offers" class="ml-3">
+                                <span>عروض موسمية</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 3 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            3. أي مقاييس تتابع حاليًا لقياس نجاح العروض؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="tracking_metrics" value="views" class="ml-3">
+                                <span>عدد المشاهدات</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="tracking_metrics" value="sales_from_offers" class="ml-3">
+                                <span>عدد المبيعات الناتجة عن العرض</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="tracking_metrics" value="conversion_rate" class="ml-3">
+                                <span>معدل تحويل الزوار</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="tracking_metrics" value="average_basket" class="ml-3">
+                                <span>متوسط قيمة السلة</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="tracking_metrics" value="no_tracking" class="ml-3">
+                                <span>لا أتابع</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 4 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            4. إذا أتاح النظام لوحة تحكم، ما المقياس الأهم بالنسبة لك؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="important_metric" value="sales" class="ml-3">
+                                <span>المبيعات</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="important_metric" value="engagement" class="ml-3">
+                                <span>التفاعل</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="important_metric" value="views_count" class="ml-3">
+                                <span>عدد مشاهدات العرض</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="important_metric" value="conversion_rate_dashboard" class="ml-3">
+                                <span>معدل التحويل</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 5 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            5. لأي فئة من العملاء تود أن يولّد النظام عروض تلقائية؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="target_customers" value="existing_customers" class="ml-3">
+                                <span>العملاء القدامى</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="target_customers" value="new_customers" class="ml-3">
+                                <span>العملاء الجدد</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="target_customers" value="visitors_no_purchase" class="ml-3">
+                                <span>الزوار الذين لم يشتروا</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="target_customers" value="geographic" class="ml-3">
+                                <span>حسب الموقع الجغرافي</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="target_customers" value="not_interested" class="ml-3">
+                                <span>لا أرغب حاليًا</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 6 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            6. كم مرة تفضل أن يقترح النظام تحديث العرض بناءً على الأداء؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="update_frequency" value="daily" class="ml-3">
+                                <span>يوميًا</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="update_frequency" value="weekly" class="ml-3">
+                                <span>أسبوعيًا</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="update_frequency" value="as_needed" class="ml-3">
+                                <span>عند الحاجة فقط</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 7 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            7. هل تعتقد أن إرسال إشعار فوري للعميل سيزيد من احتمال الشراء؟ (مقياس 1–5)
+                        </label>
+                        <div class="flex justify-center space-x-4">
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="instant_notification" value="1" class="mb-2">
+                                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">1</div>
+                                    <span class="text-sm mt-1">مستحيل</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="instant_notification" value="2" class="mb-2">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">2</div>
+                                    <span class="text-sm mt-1">غير محتمل</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="instant_notification" value="3" class="mb-2">
+                                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold">3</div>
+                                    <span class="text-sm mt-1">ربما</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="instant_notification" value="4" class="mb-2">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">4</div>
+                                    <span class="text-sm mt-1">محتمل</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="instant_notification" value="5" class="mb-2">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">5</div>
+                                    <span class="text-sm mt-1">مؤكد</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 8 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            8. ما مدى استعدادك لتعديل نسبة التخفيض بحسب تفاعل العملاء؟ (مقياس 1–5)
+                        </label>
+                        <div class="flex justify-center space-x-4">
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="discount_flexibility" value="1" class="mb-2">
+                                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">1</div>
+                                    <span class="text-sm mt-1">غير مستعد</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="discount_flexibility" value="2" class="mb-2">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">2</div>
+                                    <span class="text-sm mt-1">قليل الاستعداد</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="discount_flexibility" value="3" class="mb-2">
+                                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold">3</div>
+                                    <span class="text-sm mt-1">متوسط</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="discount_flexibility" value="4" class="mb-2">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">4</div>
+                                    <span class="text-sm mt-1">مستعد</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="discount_flexibility" value="5" class="mb-2">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">5</div>
+                                    <span class="text-sm mt-1">مستعد تماماً</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 9 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            9. ما نتيجة الأداء التي تعتبر بالنسبة لك "نجاحًا واضحًا"؟
+                        </label>
+                        <input type="text" name="success_criteria" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="مثال: زيادة المبيعات بنسبة 20% خلال شهر">
+                    </div>
+
+                    <!-- السؤال 10 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            10. إذا كان بإمكانك إضافة ميزة ذكية واحدة للنظام، ما هي؟
+                        </label>
+                        <textarea name="smart_feature_suggestion" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="اكتب فكرتك التفصيلية هنا..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم الثالث: التحديات والمخاوف والرغبة في التبني -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-purple-600 text-white p-6">
+                    <h3 class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-exclamation-triangle ml-3"></i>
+                        القسم الثالث: التحديات والمخاوف والرغبة في التبني
+                    </h3>
+                </div>
+                <div class="p-6 space-y-6">
+                    <!-- السؤال 1 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            1. ما أهم حاجز يمنعك من استخدام نظام موحّد للعروض؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="cost" class="ml-3">
+                                <span>التكلفة</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="difficulty" class="ml-3">
+                                <span>صعوبة الاستخدام</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="privacy" class="ml-3">
+                                <span>الخصوصية</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="doubt_results" class="ml-3">
+                                <span>الشك في النتائج</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="training_needs" class="ml-3">
+                                <span>الحاجة للتدريب</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="barriers" value="no_support" class="ml-3">
+                                <span>عدم وجود دعم</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 2 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            2. هل ترى أن تجربة مجانية للنظام ضرورية قبل الاشتراك؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="free_trial_necessity" value="yes" class="ml-3">
+                                <span>نعم</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="free_trial_necessity" value="no" class="ml-3">
+                                <span>لا</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 3 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            3. ما مستوى القلق لديك من مشاركة بيانات المبيعات مقابل الحصول على أداء أفضل؟ (مقياس 1–5)
+                        </label>
+                        <div class="flex justify-center space-x-4">
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="data_sharing_concern" value="1" class="mb-2">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">1</div>
+                                    <span class="text-sm mt-1">لا قلق</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="data_sharing_concern" value="2" class="mb-2">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">2</div>
+                                    <span class="text-sm mt-1">قلق قليل</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="data_sharing_concern" value="3" class="mb-2">
+                                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold">3</div>
+                                    <span class="text-sm mt-1">قلق متوسط</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="data_sharing_concern" value="4" class="mb-2">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">4</div>
+                                    <span class="text-sm mt-1">قلق كبير</span>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <label class="scale-option flex flex-col items-center cursor-pointer">
+                                    <input type="radio" name="data_sharing_concern" value="5" class="mb-2">
+                                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">5</div>
+                                    <span class="text-sm mt-1">قلق شديد</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 4 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            4. ما شروط الثقة التي تحتاجها لتجربة هذا النظام؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="trust_conditions" value="clear_contract" class="ml-3">
+                                <span>عقد واضح</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="trust_conditions" value="free_trial" class="ml-3">
+                                <span>تجربة مجانية</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="trust_conditions" value="performance_reports" class="ml-3">
+                                <span>تقارير أداء</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="trust_conditions" value="technical_support" class="ml-3">
+                                <span>دعم فني</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="trust_conditions" value="money_back_guarantee" class="ml-3">
+                                <span>ضمان استرداد</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 5 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            5. كم يمكنك دفعه شهريًا مقابل خدمة إذا أثبتت زيادة واضحة في المبيعات؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="pricing" value="less_than_100" class="ml-3">
+                                <span>أقل من 100 ريال</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="pricing" value="100_300" class="ml-3">
+                                <span>100 – 300 ريال</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="pricing" value="300_500" class="ml-3">
+                                <span>300 – 500 ريال</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="pricing" value="more_than_500" class="ml-3">
+                                <span>أكثر من 500 ريال</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 6 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            6. هل تفكر في استخدام حلول توقّع العروض (Predictive Offers) مستقبلاً إذا أثبتت نجاحها؟
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="predictive_offers" value="yes" class="ml-3">
+                                <span>نعم</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="predictive_offers" value="no" class="ml-3">
+                                <span>لا</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="radio" name="predictive_offers" value="maybe" class="ml-3">
+                                <span>ربما</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 7 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            7. أي قناة تفضل أن يظهر فيها عرض متجرك؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="preferred_channels" value="dedicated_app" class="ml-3">
+                                <span>تطبيق مخصص</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="preferred_channels" value="website" class="ml-3">
+                                <span>موقع ويب</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="preferred_channels" value="notifications" class="ml-3">
+                                <span>إشعارات</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="preferred_channels" value="social_media" class="ml-3">
+                                <span>وسائل التواصل</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="preferred_channels" value="local_listings" class="ml-3">
+                                <span>قوائم محلية</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 8 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            8. ما الميزة الأكثر أهمية في لوحة التحكم بالنسبة لك؟ (يمكن اختيار أكثر من إجابة)
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="dashboard_features" value="quick_editing" class="ml-3">
+                                <span>تحرير سريع</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="dashboard_features" value="weekly_reports" class="ml-3">
+                                <span>تقارير أسبوعية</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="dashboard_features" value="competitor_comparison" class="ml-3">
+                                <span>مقارنة عروض المنافسين</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="dashboard_features" value="offer_scheduling" class="ml-3">
+                                <span>جدولة العروض</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" name="dashboard_features" value="geographic_targeting" class="ml-3">
+                                <span>استهداف جغرافي</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- السؤال 9 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            9. ما الذي يجعلك لا تثق في بعض الأنظمة الرقمية؟
+                        </label>
+                        <input type="text" name="digital_distrust_reasons" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="اكتب الأسباب هنا...">
+                    </div>
+
+                    <!-- السؤال 10 -->
+                    <div class="question-card bg-gray-50 p-6 rounded-xl">
+                        <label class="block text-lg font-semibold text-gray-800 mb-4">
+                            10. هل لديك ملاحظات أو اقتراحات أخرى قد تساعد في تحسين هذا النظام؟
+                        </label>
+                        <textarea name="additional_suggestions" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="اكتب ملاحظاتك واقتراحاتك هنا..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="text-center py-8">
+                <button type="submit" class="submit-btn text-white px-12 py-4 rounded-2xl text-xl font-bold shadow-lg">
+                    <i class="fas fa-paper-plane ml-3"></i>
+                    إرسال الاستبيان
+                </button>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center py-6 text-gray-600">
+            <p class="text-lg">شكرًا لوقتكم وتعاونكم في تطوير هذا النظام</p>
+            <div class="flex justify-center items-center mt-4 space-x-6">
+                <i class="fas fa-heart text-red-500"></i>
+                <span>تم تصميم هذا الاستبيان بعناية لفهم احتياجاتكم</span>
+                <i class="fas fa-star text-yellow-500"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // جمع البيانات
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            // عرض رسالة نجاح
+            alert('تم إرسال الاستبيان بنجاح! شكرًا لمشاركتكم القيّمة.');
+            
+            // في التطبيق الحقيقي، ستتم معالجة البيانات هنا
+            console.log('Survey Data:', data);
+            
+            // إعادة تعيين النموذج
+            this.reset();
+        });
+
+        // تحسين تجربة المستخدم - تمييز الأسئلة المكتملة
+        document.querySelectorAll('input, textarea, select').forEach(element => {
+            element.addEventListener('change', function() {
+                const questionCard = this.closest('.question-card');
+                if (this.value.trim() !== '' || this.type === 'radio' || this.type === 'checkbox') {
+                    questionCard.classList.add('border-green-300', 'bg-green-50');
+                    questionCard.classList.remove('bg-gray-50');
+                }
+            });
+        });
+
+        // تنبيه للتحقق من اكتمال الأسئلة الإجبارية قبل الإرسال
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            const requiredFields = ['store_name', 'store_size', 'offers_count'];
+            let allFieldsComplete = true;
+            
+            requiredFields.forEach(fieldName => {
+                const field = document.querySelector(`[name="${fieldName}"]`);
+                if (!field || (field.type === 'text' && !field.value.trim()) || 
+                    (field.type === 'radio' && !document.querySelector(`[name="${fieldName}"]:checked`))) {
+                    allFieldsComplete = false;
+                }
+            });
+            
+            if (!allFieldsComplete) {
+                e.preventDefault();
+                alert('يرجى ملء جميع الحقول الأساسية المطلوبة (اسم المتجر، حجم المتجر، عدد العروض)');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
