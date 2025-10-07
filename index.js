@@ -1,152 +1,357 @@
 const express = require('express');
-const http = require('http');
 const WebSocket = require('ws');
-const cors = require('cors');
+const http = require('http');
+const { v4: uuidv4 } = require('uuid');
 
-const app = express();
-const server = http.createServer(app);
-
-// إعداد CORS
-app.use(cors());
-app.use(express.json());
-
-// إنشاء WebSocket server
-const wss = new WebSocket.Server({ server });
-
-// متغيرات لتخزين الاتصالات والرسائل
-const clients = new Set();
-const messages = [];
-
-// عند الاتصال بـ WebSocket
-wss.on('connection', (ws, req) => {
-    console.log('عميل جديد متصل');
-    clients.add(ws);
-
-    // إرسال رسالة ترحيب
-    ws.send(JSON.stringify({
-        type: 'welcome',
-        message: 'أهلاً وسهلاً! تم الاتصال بنجاح',
-        timestamp: new Date().toISOString(),
-        clientsCount: clients.size
-    }));
-
-    // إرسال الرسائل السابقة للعميل الجديد
-    if (messages.length > 0) {
-        ws.send(JSON.stringify({
-            type: 'history',
-            messages: messages.slice(-10) // آخر 10 رسائل
-        }));
+class WebServer {
+    constructor() {
+        this.MAX_CLIENTS = 10;
+        this.clients = new Map(); // Map<id, {socket, lastHeartbeat}>
+        this.app = express();
+        this.server = null;
+        this.wss = null;
+        this.heartbeatTimer = null;
+        
+        this.allowedTypes = [
+            'join',
+            'offer',
+            'answer',
+            'candidate',
+            'leave',
+            'text-message'
+        ];
+        
+        this.setupMiddleware();
     }
-
-    // استقبال الرسائل من العميل
-    ws.on('message', (data) => {
-        try {
-            const messageData = JSON.parse(data);
-            console.log('رسالة مستلمة:', messageData);
-
-            // إنشاء رسالة مع الوقت
-            const message = {
-                id: Date.now(),
-                type: messageData.type || 'message',
-                content: messageData.content,
-                sender: messageData.sender || 'مجهول',
-                timestamp: new Date().toISOString()
-            };
-
-            // حفظ الرسالة
-            messages.push(message);
-            
-            // الاحتفاظ بآخر 100 رسالة فقط
-            if (messages.length > 100) {
-                messages.shift();
+    
+    setupMiddleware() {
+        // إعداد CORS
+        this.app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            next();
+        });
+        
+        // معالجة الطلبات غير WebSocket
+        this.app.get('/', (req, res) => {
+            res.status(403).send('غير مسموح - طلبات WebSocket فقط');
+        });
+        
+        this.app.use((req, res) => {
+            res.status(404).send('غير موجود');
+        });
+    }
+    
+    start(port = 5000) {
+        return new Promise((resolve, reject) => {
+            if (this.server) {
+                console.log(`الخادم يعمل بالفعل على المنفذ ${port}`);
+                resolve(port);
+                return;
             }
-
-            // إرسال الرسالة لجميع العملاء المتصلين
-            const broadcastMessage = JSON.stringify({
-                type: 'broadcast',
-                message: message,
-                clientsCount: clients.size
+            
+            try {
+                this.server = http.createServer(this.app);
+                
+                // إعداد WebSocket Server
+                this.wss = new WebSocket.Server({ 
+                    server: this.server,
+                    verifyClient: (info) => {
+                        // التحقق من عدد العملاء
+                        if (this.clients.size >= this.MAX_CLIENTS) {
+                            console.log('تم رفض اتصال جديد - تم الوصول للحد الأقصى من العملاء');
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+                
+                this.wss.on('connection', (socket, req) => {
+                    this.handleNewConnection(socket, req);
+                });
+                
+                this.server.listen(port, '0.0.0.0', () => {
+                    console.log(`تم بدء خادم الإشارات على المنفذ ${port}`);
+                    this.startHeartbeatTimer();
+                    resolve(port);
+                });
+                
+                this.server.on('error', (err) => {
+                    console.error('فشل في بدء الخادم:', err);
+                    reject(err);
+                });
+                
+            } catch (error) {
+                console.error('فشل في بدء الخادم:', error);
+                reject(error);
+            }
+        });
+    }
+    
+    handleNewConnection(socket, req) {
+        try {
+            const id = uuidv4();
+            const clientInfo = {
+                socket: socket,
+                lastHeartbeat: new Date(),
+                ip: req.socket.remoteAddress
+            };
+            
+            this.clients.set(id, clientInfo);
+            
+            console.log(`عميل جديد متصل: ${id} (إجمالي العملاء: ${this.clients.size})`);
+            
+            // إرسال الهوية المخصصة وقائمة الأقران الحاليين
+            const peers = Array.from(this.clients.keys()).filter(k => k !== id);
+            const welcomeMessage = {
+                type: 'id',
+                id: id,
+                peers: peers,
+                timestamp: Date.now()
+            };
+            
+            this.sendToClient(socket, welcomeMessage);
+            
+            // إشعار الآخرين بوصول عميل جديد
+            this.broadcastToOthers(id, {
+                type: 'peer-joined',
+                id: id,
+                timestamp: Date.now()
             });
-
-            clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(broadcastMessage);
+            
+            // الاستماع للرسائل
+            socket.on('message', (message) => {
+                this.handleMessage(id, message);
+            });
+            
+            socket.on('close', () => {
+                this.handleDisconnection(id);
+            });
+            
+            socket.on('error', (error) => {
+                this.handleError(id, error);
+            });
+            
+            // إرسال ping للتأكد من الاتصال
+            socket.on('pong', () => {
+                if (this.clients.has(id)) {
+                    this.clients.get(id).lastHeartbeat = new Date();
                 }
             });
-
+            
         } catch (error) {
-            console.error('خطأ في معالجة الرسالة:', error);
-            ws.send(JSON.stringify({
-                type: 'error',
-                message: 'خطأ في معالجة الرسالة'
-            }));
+            console.error('فشل في إعداد اتصال WebSocket:', error);
         }
-    });
-
-    // عند قطع الاتصال
-    ws.on('close', () => {
-        console.log('تم قطع الاتصال مع عميل');
-        clients.delete(ws);
-        
-        // إخبار العملاء الآخرين بعدد الاتصالات الجديد
-        const disconnectMessage = JSON.stringify({
-            type: 'clientDisconnected',
-            clientsCount: clients.size
-        });
-
-        clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(disconnectMessage);
+    }
+    
+    handleMessage(senderId, message) {
+        try {
+            if (!this.clients.has(senderId)) {
+                return;
             }
+            
+            let msg;
+            try {
+                msg = JSON.parse(message.toString());
+            } catch (e) {
+                console.warn(`رسالة غير صالحة من ${senderId}: خطأ في JSON`);
+                return;
+            }
+            
+            // التحقق من صحة الرسالة
+            if (!this.validateMessage(msg)) {
+                console.warn(`رسالة غير صالحة من ${senderId}`);
+                return;
+            }
+            
+            // تحديث وقت آخر heartbeat
+            this.clients.get(senderId).lastHeartbeat = new Date();
+            
+            // إضافة معلومات المرسل
+            msg.from = senderId;
+            msg.timestamp = Date.now();
+            
+            const to = msg.to;
+            
+            if (to && this.clients.has(to)) {
+                // رسالة مباشرة لعميل محدد
+                this.sendToClient(this.clients.get(to).socket, msg);
+                console.log(`رسالة من ${senderId} إلى ${to}: ${msg.type}`);
+            } else {
+                // بث للجميع عدا المرسل
+                this.broadcastToOthers(senderId, msg);
+                console.log(`بث من ${senderId}: ${msg.type}`);
+            }
+            
+        } catch (error) {
+            console.error(`خطأ في معالجة رسالة من ${senderId}:`, error);
+        }
+    }
+    
+    validateMessage(msg) {
+        // التحقق من وجود حقل type
+        if (!msg.type || typeof msg.type !== 'string') {
+            return false;
+        }
+        
+        const type = msg.type;
+        
+        if (!this.allowedTypes.includes(type)) {
+            return false;
+        }
+        
+        // تحققات إضافية حسب نوع الرسالة
+        if (type === 'offer' || type === 'answer') {
+            return msg.hasOwnProperty('sdp') && msg.hasOwnProperty('sdpType');
+        }
+        
+        if (type === 'candidate') {
+            return msg.hasOwnProperty('candidate');
+        }
+        
+        return true;
+    }
+    
+    sendToClient(socket, message) {
+        try {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(message));
+            }
+        } catch (error) {
+            console.error('فشل في إرسال رسالة للعميل:', error);
+        }
+    }
+    
+    broadcastToOthers(senderId, message) {
+        for (const [id, clientInfo] of this.clients.entries()) {
+            if (id !== senderId) {
+                this.sendToClient(clientInfo.socket, message);
+            }
+        }
+    }
+    
+    handleDisconnection(id) {
+        if (!this.clients.has(id)) {
+            return;
+        }
+        
+        this.clients.delete(id);
+        
+        console.log(`عميل منقطع: ${id} (العملاء المتبقون: ${this.clients.size})`);
+        
+        // إشعار الآخرين بالانقطاع
+        this.broadcastToOthers(id, {
+            type: 'peer-left',
+            id: id,
+            timestamp: Date.now()
         });
-    });
+    }
+    
+    handleError(id, error) {
+        console.error(`خطأ في اتصال العميل ${id}:`, error);
+        this.handleDisconnection(id);
+    }
+    
+    startHeartbeatTimer() {
+        // فحص دوري كل 30 ثانية للتأكد من الاتصالات
+        this.heartbeatTimer = setInterval(() => {
+            const now = new Date();
+            const timeout = 60000; // 60 ثانية timeout
+            
+            for (const [id, clientInfo] of this.clients.entries()) {
+                if (now - clientInfo.lastHeartbeat > timeout) {
+                    console.log(`انتهت مهلة العميل ${id}`);
+                    clientInfo.socket.terminate();
+                    this.handleDisconnection(id);
+                } else {
+                    // إرسال ping
+                    if (clientInfo.socket.readyState === WebSocket.OPEN) {
+                        clientInfo.socket.ping();
+                    }
+                }
+            }
+        }, 30000);
+    }
+    
+    async stop() {
+        try {
+            console.log('إيقاف خادم الإشارات...');
+            
+            if (this.heartbeatTimer) {
+                clearInterval(this.heartbeatTimer);
+                this.heartbeatTimer = null;
+            }
+            
+            // إشعار جميع العملاء بالإغلاق
+            const shutdownMessage = {
+                type: 'server-shutdown',
+                message: 'الخادم يتم إغلاقه',
+                timestamp: Date.now()
+            };
+            
+            for (const [id, clientInfo] of this.clients.entries()) {
+                this.sendToClient(clientInfo.socket, shutdownMessage);
+                clientInfo.socket.close();
+            }
+            
+            this.clients.clear();
+            
+            if (this.wss) {
+                this.wss.close();
+                this.wss = null;
+            }
+            
+            if (this.server) {
+                await new Promise((resolve) => {
+                    this.server.close(resolve);
+                });
+                this.server = null;
+            }
+            
+            console.log('تم إيقاف خادم الإشارات بنجاح');
+            
+        } catch (error) {
+            console.error('خطأ أثناء إيقاف الخادم:', error);
+        }
+    }
+    
+    // خصائص مساعدة
+    get isRunning() {
+        return this.server !== null;
+    }
+    
+    get clientCount() {
+        return this.clients.size;
+    }
+}
 
-    // معالجة الأخطاء
-    ws.on('error', (error) => {
-        console.error('خطأ في WebSocket:', error);
-        clients.delete(ws);
-    });
-});
+module.exports = WebServer;
 
-// Routes لـ REST API
-app.get('/', (req, res) => {
-    res.json({
-        message: 'خادم WebSocket يعمل بنجاح!',
-        connectedClients: clients.size,
-        totalMessages: messages.length
+// إذا تم تشغيل الملف مباشرة
+if (require.main === module) {
+    const server = new WebServer();
+    
+    const port = process.env.PORT || 5000;
+    
+    server.start(port)
+        .then(() => {
+            console.log(`السيرفر يعمل على المنفذ ${port}`);
+        })
+        .catch((error) => {
+            console.error('فشل في بدء السيرفر:', error);
+            process.exit(1);
+        });
+    
+    // معالجة إيقاف السيرفر بشكل صحيح
+    process.on('SIGINT', async () => {
+        console.log('\nتم استلام إشارة الإيقاف...');
+        await server.stop();
+        process.exit(0);
     });
-});
-
-app.get('/api/status', (req, res) => {
-    res.json({
-        status: 'online',
-        connectedClients: clients.size,
-        totalMessages: messages.length,
-        uptime: process.uptime()
+    
+    process.on('SIGTERM', async () => {
+        console.log('\nتم استلام إشارة الإنهاء...');
+        await server.stop();
+        process.exit(0);
     });
-});
-
-app.get('/api/messages', (req, res) => {
-    res.json({
-        messages: messages.slice(-20), // آخر 20 رسالة
-        count: messages.length
-    });
-});
-
-// بدء الخادم
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`الخادم يعمل على المنفذ ${PORT}`);
-    console.log(`WebSocket متاح على: ws://localhost:${PORT}`);
-});
-
-// معالجة إغلاق الخادم بسلاسة
-process.on('SIGTERM', () => {
-    console.log('إغلاق الخادم...');
-    clients.forEach((client) => {
-        client.close();
-    });
-    server.close(() => {
-        console.log('تم إغلاق الخادم');
-    });
-});
+}
