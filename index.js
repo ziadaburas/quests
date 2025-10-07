@@ -1,65 +1,152 @@
-import express from "express";
-import { WebSocketServer } from "ws";
-import http from "http";
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+const cors = require('cors');
 
 const app = express();
-
-// HTTP Server (بدون HTTPS)
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
 
-// استقبال الاتصالات
-wss.on("connection", (ws) => {
-  console.log("🔥 عميل جديد متصل");
+// إعداد CORS
+app.use(cors());
+app.use(express.json());
 
-  ws.on("message", (msg) => {
-    console.log("📩 Received:", msg.toString());
+// إنشاء WebSocket server
+const wss = new WebSocket.Server({ server });
 
-    // أرسل الرسالة إلى جميع العملاء الآخرين
-    wss.clients.forEach((client) => {
-      if (client !== ws && client.readyState === ws.OPEN) {
-        client.send(msg.toString());
-      }
+// متغيرات لتخزين الاتصالات والرسائل
+const clients = new Set();
+const messages = [];
+
+// عند الاتصال بـ WebSocket
+wss.on('connection', (ws, req) => {
+    console.log('عميل جديد متصل');
+    clients.add(ws);
+
+    // إرسال رسالة ترحيب
+    ws.send(JSON.stringify({
+        type: 'welcome',
+        message: 'أهلاً وسهلاً! تم الاتصال بنجاح',
+        timestamp: new Date().toISOString(),
+        clientsCount: clients.size
+    }));
+
+    // إرسال الرسائل السابقة للعميل الجديد
+    if (messages.length > 0) {
+        ws.send(JSON.stringify({
+            type: 'history',
+            messages: messages.slice(-10) // آخر 10 رسائل
+        }));
+    }
+
+    // استقبال الرسائل من العميل
+    ws.on('message', (data) => {
+        try {
+            const messageData = JSON.parse(data);
+            console.log('رسالة مستلمة:', messageData);
+
+            // إنشاء رسالة مع الوقت
+            const message = {
+                id: Date.now(),
+                type: messageData.type || 'message',
+                content: messageData.content,
+                sender: messageData.sender || 'مجهول',
+                timestamp: new Date().toISOString()
+            };
+
+            // حفظ الرسالة
+            messages.push(message);
+            
+            // الاحتفاظ بآخر 100 رسالة فقط
+            if (messages.length > 100) {
+                messages.shift();
+            }
+
+            // إرسال الرسالة لجميع العملاء المتصلين
+            const broadcastMessage = JSON.stringify({
+                type: 'broadcast',
+                message: message,
+                clientsCount: clients.size
+            });
+
+            clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(broadcastMessage);
+                }
+            });
+
+        } catch (error) {
+            console.error('خطأ في معالجة الرسالة:', error);
+            ws.send(JSON.stringify({
+                type: 'error',
+                message: 'خطأ في معالجة الرسالة'
+            }));
+        }
     });
-  });
 
-  ws.on("close", () => {
-    console.log("❌ تم إغلاق الاتصال");
-  });
+    // عند قطع الاتصال
+    ws.on('close', () => {
+        console.log('تم قطع الاتصال مع عميل');
+        clients.delete(ws);
+        
+        // إخبار العملاء الآخرين بعدد الاتصالات الجديد
+        const disconnectMessage = JSON.stringify({
+            type: 'clientDisconnected',
+            clientsCount: clients.size
+        });
+
+        clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(disconnectMessage);
+            }
+        });
+    });
+
+    // معالجة الأخطاء
+    ws.on('error', (error) => {
+        console.error('خطأ في WebSocket:', error);
+        clients.delete(ws);
+    });
 });
 
-// تشغيل السيرفر على المنفذ 5000
-const PORT = process.env.PORT || 5000;
+// Routes لـ REST API
 app.get('/', (req, res) => {
-  console.log(PORT)
-  res.send(PORT)
+    res.json({
+        message: 'خادم WebSocket يعمل بنجاح!',
+        connectedClients: clients.size,
+        totalMessages: messages.length
+    });
 });
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 WebSocket Server يعمل على ws://0.0.0.0:${PORT}`);
+
+app.get('/api/status', (req, res) => {
+    res.json({
+        status: 'online',
+        connectedClients: clients.size,
+        totalMessages: messages.length,
+        uptime: process.uptime()
+    });
 });
 
+app.get('/api/messages', (req, res) => {
+    res.json({
+        messages: messages.slice(-20), // آخر 20 رسالة
+        count: messages.length
+    });
+});
 
-/*const express = require('express');
-const path = require('path');
-
-const app = express();
+// بدء الخادم
 const PORT = process.env.PORT || 3000;
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+server.listen(PORT, () => {
+    console.log(`الخادم يعمل على المنفذ ${PORT}`);
+    console.log(`WebSocket متاح على: ws://localhost:${PORT}`);
 });
 
-app.get('/form1', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'form1.html'));
+// معالجة إغلاق الخادم بسلاسة
+process.on('SIGTERM', () => {
+    console.log('إغلاق الخادم...');
+    clients.forEach((client) => {
+        client.close();
+    });
+    server.close(() => {
+        console.log('تم إغلاق الخادم');
+    });
 });
-
-app.get('/form2', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'form2.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-*/
