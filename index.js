@@ -30,6 +30,10 @@ wss.on("connection", (ws) => {
 
 // تشغيل السيرفر على المنفذ 5000
 const PORT = process.env.PORT || 5000;
+app.get('/', (req, res) => {
+  console.log(PORT)
+  res.send(PORT)
+});
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 WebSocket Server يعمل على ws://0.0.0.0:${PORT}`);
 });
