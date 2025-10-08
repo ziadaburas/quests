@@ -328,7 +328,7 @@ class WebServer {
 module.exports = WebServer;
 
 // إذا تم تشغيل الملف مباشرة
-if (require.main === module) {
+//if (require.main === module) {
     const server = new WebServer();
     
     const port = process.env.PORT || 5000;
@@ -354,4 +354,4 @@ if (require.main === module) {
         await server.stop();
         process.exit(0);
     });
-}
+//}
